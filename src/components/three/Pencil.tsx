@@ -32,6 +32,7 @@ const Pencil: React.FC<PencilProps> = ({
 
   const FERRULE_LENGTH = 0.16;
   const ERASER_LENGTH = 0.22;
+  const ERASER_FERRULE_OFFSET = FERRULE_LENGTH + ERASER_LENGTH;
 
   const tipWoodLength = useMemo(() => {
     return 0.12 + sharpness * 0.35;
@@ -74,10 +75,14 @@ const Pencil: React.FC<PencilProps> = ({
     ? [0, 0, -Math.PI / 2]
     : [Math.PI / 2.3, -Math.PI / 4.5, Math.PI / 5];
 
-  const TIP_ENTRY = 0.05;
+  const WOOD_BASE_ENTRY = 0.02;
+
+  const woodConeBaseLocalY = useMemo(() => {
+    return -totalLength / 2 + bodyLength;
+  }, [totalLength, bodyLength]);
 
   const rootPosition: [number, number, number] = state === 'inserted'
-    ? [worldHoleX + TIP_ENTRY - totalLength / 2 + advanceAmount, worldY, 0.02]
+    ? [worldHoleX - woodConeBaseLocalY + WOOD_BASE_ENTRY + advanceAmount, worldY, 0]
     : [0.8, -0.45, 0.8];
 
   useFrame((_, delta) => {

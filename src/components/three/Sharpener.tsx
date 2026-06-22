@@ -118,26 +118,6 @@ const Sharpener: React.FC<SharpenerProps> = ({
         />
       </mesh>
 
-      {/* 主体顶部斜面装饰 */}
-      <mesh position={[0, 0.61, 0]} rotation={[0, 0, 0]} castShadow>
-        <boxGeometry args={[2.1, 0.02, 1.3]} />
-        <meshStandardMaterial
-          color="#152a52"
-          metalness={0.9}
-          roughness={0.2}
-        />
-      </mesh>
-
-      {/* 主体底部装饰条 */}
-      <mesh position={[0, -0.61, 0]} castShadow>
-        <boxGeometry args={[2.15, 0.04, 1.35]} />
-        <meshStandardMaterial
-          color="#152a52"
-          metalness={0.9}
-          roughness={0.2}
-        />
-      </mesh>
-
       {/* 铅笔插入孔 */}
       {holePositions.map((hole, i) => (
         <group key={i}>
@@ -162,37 +142,35 @@ const Sharpener: React.FC<SharpenerProps> = ({
         </group>
       ))}
 
-      {/* 正面金色小铭牌 */}
-      <group position={[0, -0.05, 0.71]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.48, 0.18, 0.025]} />
+      {/* 正面角落装饰钉 */}
+      {[[-0.85, 0.5], [0.85, 0.5], [-0.85, -0.5], [0.85, -0.5]].map(([x, y], i) => (
+        <mesh key={i} position={[x, y, 0.712]}>
+          <sphereGeometry args={[0.022, 10, 10]} />
           <meshStandardMaterial
-            color="#d4af37"
-            metalness={0.85}
-            roughness={0.25}
-          />
-        </mesh>
-        {/* 铭牌边框高光 */}
-        <mesh position={[0, 0, 0.014]}>
-          <boxGeometry args={[0.44, 0.14, 0.002]} />
-          <meshStandardMaterial
-            color="#e8c96a"
+            color="#2a4a8a"
             metalness={0.9}
-            roughness={0.2}
+            roughness={0.15}
           />
         </mesh>
-        {/* 装饰铆钉 */}
-        {[[-0.18, 0.05], [0.18, 0.05], [-0.18, -0.05], [0.18, -0.05]].map(([x, y], i) => (
-          <mesh key={i} position={[x, y, 0.016]}>
-            <sphereGeometry args={[0.016, 10, 10]} />
-            <meshStandardMaterial
-              color="#8b6914"
-              metalness={0.7}
-              roughness={0.4}
-            />
-          </mesh>
-        ))}
-      </group>
+      ))}
+
+      {/* 正面中心小徽章 */}
+      <mesh position={[0, -0.35, 0.711]}>
+        <cylinderGeometry args={[0.08, 0.08, 0.015, 20]} />
+        <meshStandardMaterial
+          color="#d4af37"
+          metalness={0.9}
+          roughness={0.2}
+        />
+      </mesh>
+      <mesh position={[0, -0.35, 0.72]} rotation={[0, 0, 0]}>
+        <torusGeometry args={[0.055, 0.008, 8, 24]} />
+        <meshStandardMaterial
+          color="#f0d060"
+          metalness={0.95}
+          roughness={0.15}
+        />
+      </mesh>
 
       {/* 摇柄转轴基座 */}
       <mesh position={[1.22, 0, 0]} castShadow>
