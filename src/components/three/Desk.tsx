@@ -1,7 +1,10 @@
 import React from 'react';
 import { OrbitControls } from '@react-three/drei';
+import { usePencilStore } from '../../store/usePencilStore';
 
 const Desk: React.FC = () => {
+  const isDragging = usePencilStore((s) => s.session.isDragging);
+
   return (
     <>
       <ambientLight intensity={0.55} color="#FFE8CC" />
@@ -54,11 +57,12 @@ const Desk: React.FC = () => {
       <OrbitControls
         enablePan={false}
         enableZoom={true}
+        enableRotate={!isDragging}
         minDistance={3}
         maxDistance={12}
         minPolarAngle={Math.PI / 7}
         maxPolarAngle={Math.PI / 2.1}
-        target={[-0.4, 0, 0.4]}
+        target={[0.4, 0, 0.4]}
       />
     </>
   );

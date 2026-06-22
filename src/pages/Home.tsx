@@ -21,7 +21,7 @@ export default function Home() {
 
       <Canvas
         shadows
-        camera={{ position: [-5.2, 3.2, 3.0], fov: 42 }}
+        camera={{ position: [5.5, 3.0, 3.2], fov: 42 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 2]}
       >

@@ -71,13 +71,13 @@ const Pencil: React.FC<PencilProps> = ({
   const paintColor = useMemo(() => new THREE.Color(pencilColor), [pencilColor]);
 
   const rootRotation: [number, number, number] = state === 'inserted'
-    ? [0, 0, Math.PI / 2]
+    ? [0, 0, -Math.PI / 2]
     : [Math.PI / 2.3, -Math.PI / 4.5, Math.PI / 5];
 
   const TIP_ENTRY = 0.05;
 
   const rootPosition: [number, number, number] = state === 'inserted'
-    ? [worldHoleX - TIP_ENTRY - totalLength / 2 + advanceAmount, worldY, 0.02]
+    ? [worldHoleX + TIP_ENTRY - totalLength / 2 + advanceAmount, worldY, 0.02]
     : [0.8, -0.45, 0.8];
 
   useFrame((_, delta) => {

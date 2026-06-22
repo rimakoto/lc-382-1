@@ -1,6 +1,7 @@
 import React, { useRef, useMemo, useEffect, useState } from 'react'
 import type { Group, Mesh } from 'three'
 import type { ThreeEvent } from '@react-three/fiber'
+import { usePencilStore } from '../../store/usePencilStore'
 
 interface SharpenerProps {
   onCrankDrag: (deltaAngle: number) => void
@@ -19,12 +20,15 @@ const Sharpener: React.FC<SharpenerProps> = ({
   const bodyRef = useRef<Mesh>(null)
   const [isDragging, setIsDragging] = useState(false)
   const lastPointerPos = useRef({ x: 0, y: 0 })
+  const startDragging = usePencilStore((s) => s.actions.startDragging)
+  const stopDragging = usePencilStore((s) => s.actions.stopDragging)
 
   const crankRadius = 0.7
 
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation()
     setIsDragging(true)
+    startDragging()
     lastPointerPos.current = { x: e.clientX, y: e.clientY }
     ;(e.target as Element).setPointerCapture(e.pointerId)
   }
@@ -45,6 +49,7 @@ const Sharpener: React.FC<SharpenerProps> = ({
   const handlePointerUp = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation()
     setIsDragging(false)
+    stopDragging()
     try {
       ;(e.target as Element).releasePointerCapture(e.pointerId)
     } catch {
@@ -157,15 +162,37 @@ const Sharpener: React.FC<SharpenerProps> = ({
         </group>
       ))}
 
-      {/* 正面标签装饰 */}
-      <mesh position={[0, -0.1, 0.71]} castShadow>
-        <boxGeometry args={[1.2, 0.35, 0.02]} />
-        <meshStandardMaterial
-          color="#c9a227"
-          metalness={0.7}
-          roughness={0.35}
-        />
-      </mesh>
+      {/* 正面金色小铭牌 */}
+      <group position={[0, -0.05, 0.71]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.48, 0.18, 0.025]} />
+          <meshStandardMaterial
+            color="#d4af37"
+            metalness={0.85}
+            roughness={0.25}
+          />
+        </mesh>
+        {/* 铭牌边框高光 */}
+        <mesh position={[0, 0, 0.014]}>
+          <boxGeometry args={[0.44, 0.14, 0.002]} />
+          <meshStandardMaterial
+            color="#e8c96a"
+            metalness={0.9}
+            roughness={0.2}
+          />
+        </mesh>
+        {/* 装饰铆钉 */}
+        {[[-0.18, 0.05], [0.18, 0.05], [-0.18, -0.05], [0.18, -0.05]].map(([x, y], i) => (
+          <mesh key={i} position={[x, y, 0.016]}>
+            <sphereGeometry args={[0.016, 10, 10]} />
+            <meshStandardMaterial
+              color="#8b6914"
+              metalness={0.7}
+              roughness={0.4}
+            />
+          </mesh>
+        ))}
+      </group>
 
       {/* 摇柄转轴基座 */}
       <mesh position={[1.22, 0, 0]} castShadow>
